@@ -7,6 +7,7 @@ import pandas as pd
 import requests
 import json
 from dash.dependencies import Input, Output
+from flask_login import login_required
 
 
 
@@ -47,6 +48,12 @@ def create_kpi1(flask_app):
         
     )
 
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
+
     return dash_app
 
 
@@ -77,21 +84,83 @@ def create_kpi2(flask_app):
     dash_app.layout = html.Div(
         dcc.Graph(
             id='kpi2-graph',
-            figure= px.bar(k2_df, x="Months", y="Number of incidents", title="Incidents solved")
+            figure= px.bar(k2_df, x="Months", y="Number of incidents", title="Total Incidents solved")
         ),  
         
     )
+
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
 
     return dash_app
 
 
 
+#GET KPI3
+KPI3 = "https://bd4d4ihd6rrarpw-ladislayal.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi3/sla/" 
+r3 = requests.get(KPI3)
+KPI3JSON = r3.json()["items"]
+
+
+sla= {}
+for i in KPI3JSON:
+    if i['month'] in sla:
+        sla[i['month']].append(i['brbaja'],i['mtbaja'],i['brmedia'],i['mtmedia'],i['bralta'],i['mtalta'],i['brcritica'],i['mtcritica'])
+    else: 
+        sla[i['month']]= [i["brbaja"],i['mtbaja'],i['brmedia'],i['mtmedia'],i['bralta'],i['mtalta'],i['brcritica'],i['mtcritica']]
+
+def create_kpi3(flask_app):
+    dash_app = dash.Dash(server=flask_app, name="kpi3", url_base_pathname='/kpi3/')    
+    
+    dash_app.layout = html.Div(children=[
+        
+        dcc.Dropdown(
+            id="month",
+            options=[{"label": 'January 2018', "value":'201801'},
+                    {"label": 'February 2018', "value":'201802'},
+                    {"label": 'March 2018', "value":'201803'}
+                    ],
+            value="201801"
+        ),
+        dcc.Graph(
+            id='kpi3',
+            figure={
+                'data':[],         
+            }
+            
+        )  
+    ])
+
+
+
+    @dash_app.callback(
+    Output(component_id="kpi3",component_property="figure"),
+    [Input(component_id="month", component_property="value")]
+    )
+    def update_KPI3(value):
+        return {
+            "data": [
+            {'x': ['BR BAJA','MT BAJA','BR MEDIA','MT MEDIA','BR ALTA','MT ALTA','BT CRITICA','MT CRITICA'], 'y': sla[value], 'type': 'bar', 'name': value},
+            
+            ]
+        }
+
+        for view_function in dash_app.server.view_functions:
+            if view_function.startswith(dash_app.config.url_base_pathname):
+                dash_app.server.view_functions[view_function] = login_required(
+                    dash_app.server.view_functions[view_function]
+            )
+
+        return dash_app
 
 
 
 #GET KPI4
 
-KPI4 = "https://bd4d4ihd6rrarpw-ladislayal.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi4/BL/" #change
+KPI4 = "https://bd4d4ihd6rrarpw-ladislayal.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi4/BL/" 
 r = requests.get(KPI4)
 KPI4JSON = r.json()["items"]
 
@@ -108,22 +177,29 @@ k4_df = pd.DataFrame({
     
 })
 
+
 def create_kpi4(flask_app):
     dash_app = dash.Dash(server=flask_app, name="kpi4", url_base_pathname='/kpi4/')
     
     dash_app.layout = html.Div(
         dcc.Graph(
             id='kpi4-graph',
-            figure= px.bar(k2_df, x="Months", y="Number of incidents", title="Incidents backlog per month")
+            figure= px.bar(k4_df, x="Months", y="Number of incidents", barmode="group", title="Monthly Incidents backlog" )
         ),  
         
     )
+
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
 
     return dash_app
 
 #GET KPI5
 
-KPI5 = "https://bd4d4ihd6rrarpw-ladislayal.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi5/av/201801" #change
+KPI5 = "https://bd4d4ihd6rrarpw-ladislayal.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi5/av/" #change
 r = requests.get(KPI5)
 KPI5JSON = r.json()["items"]
 
@@ -154,18 +230,24 @@ def create_kpi5(flask_app):
     dash_app.layout = html.Div(
         dcc.Graph(
             id='kpi5-graph',
-            figure= px.bar(k5_df, x="Critical service", y="Unavailability (min)", color="Months", hover_name="Percentage availability", barmode="group", title="Critical Services availability")
+            figure= px.bar(k5_df, x="Months", y="Unavailability (min)", color="Critical service", hover_name="Percentage availability", barmode="group", title="Critical Services unavailability ('%' availability)")
         ),  
         
     )
 
-    return dash_app 
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
+
+    return dash_app
 
 
 
 #GET KPI6
 
-KPI6 = "https://bd4d4ihd6rrarpw-ladislayal.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi6/monav/201801"
+KPI6 = "https://bd4d4ihd6rrarpw-ladislayal.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi6/monav/"
 r = requests.get(KPI6)
 KPI6JSON = r.json()["items"]
 
@@ -189,10 +271,16 @@ def create_kpi6(flask_app):
     dash_app.layout = html.Div(
         dcc.Graph(
             id='kpi6-graph',
-            figure= px.bar(k6_df, x="Months", y="Monthly average availability", title="Average monthly availability of critical services")
+            figure= px.bar(k6_df, x="Months", y="Monthly average availability", barmode="group", title="Average monthly availability of critical services")
         ),  
 
     )
+
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
 
     return dash_app
 

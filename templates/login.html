@@ -27,7 +27,7 @@
 {% block content %}
 
 <body class="text-center">
-    <form class="form-signin">
+    <div class="form-signin">
         <img class="mb-4" src="static/img/iberia-airlines-75d393a0ef06e0a292c8375fff5b2f3dd2d1887478eea948d1025c370235f3c1.svg" alt="" width="150" height="150">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <form action="{{ url_for('login') }}" method="POST">
@@ -43,7 +43,7 @@
             
             <p class="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
         </form>
-    </form>
+      </div>
       
   </body>
 

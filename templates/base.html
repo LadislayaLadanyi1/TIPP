@@ -28,9 +28,9 @@
   <body{% block body_attribs %}{% endblock body_attribs %}>
     {% block body -%}
     {% block navbar %}
-    <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-light " style="background-color: #d7192d; " > 
+    <nav class="navbar navbar-fixed-top navbar-expand-lg py-5 navbar-light " style="background-color: #c61c28; " > 
         <a href="{{ url_for('index') }}" class="simple-text logo-mini" >
-          <img src="{{ url_for('static', filename='img/download.png') }}" height="55" alt="logo">
+          <img src="{{ url_for('static', filename='img/download.png') }}" height="65" alt="logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -39,19 +39,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only"></span></a>
+              <a class="nav-link" style="color: rgb(233, 191, 24);" href="{{ url_for('index') }}">Home <span class="sr-only"></span></a>
             </li>
                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" style="color: rgb(233, 191, 24);" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     KPIs
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/raised">KPI</a>
-                    <a class="dropdown-item" href="/solved">KPI2</a>
-                    <a class="dropdown-item" href="/kpi3">KPI3</a>
-                    <a class="dropdown-item" href="/backlog">KPI4</a>
-                    <a class="dropdown-item" href="/unavailability">KPI5</a>
-                    <a class="dropdown-item" href="/average_availability">KPI6</a>
+                    <a class="dropdown-item" style="color: rgb(233, 191, 24);" href="/raised">Raised</a>
+                    <a class="dropdown-item" style="color: rgb(233, 191, 24);" href="/solved">Solved</a>
+                    <a class="dropdown-item" style="color: rgb(233, 191, 24);" href="/sla">SLA</a>
+                    <a class="dropdown-item" style="color: rgb(233, 191, 24);" href="/backlog">Backlog</a>
+                    <a class="dropdown-item" style="color: rgb(233, 191, 24);" href="/unavailability">Services unavailability</a>
+                    <a class="dropdown-item" style="color: rgb(233, 191, 24);" href="/average_availability">Average monthly availability</a>
                     
                   </div>
                 </li>
@@ -59,13 +59,13 @@
           </ul>
           <ul class= "navbar-nav justify-content-end" >
             <li class="nav-item">
-              <a class="nav-link glyphicon glyphicon-user" href="{{ url_for('register') }}"> Register</a>
+              <a class="nav-link glyphicon glyphicon-user" style="color: rgb(233, 191, 24);" href="{{ url_for('register') }}"> Register</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link glyphicon glyphicon-log-in" href="{{ url_for('login') }}"> Login</a>
+              <a class="nav-link glyphicon glyphicon-log-in" style="color: rgb(233, 191, 24);" href="{{ url_for('login') }}"> Login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link glyphicon glyphicon-log-out" href="{{ url_for('logout') }}"> Logout</a>
+              <a class="nav-link glyphicon glyphicon-log-out" style="color: rgb(233, 191, 24);" href="{{ url_for('logout') }}"> Logout</a>
             </li>
           </ul>
         </div>

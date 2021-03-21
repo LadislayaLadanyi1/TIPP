@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_migrate import Migrate
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, logout_user
 from flask_login.mixins import UserMixin
 from flask_login import login_required
 
@@ -14,7 +14,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import length, Email
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from dash_application import create_kpi1, create_kpi2, create_kpi4, create_kpi6, create_kpi5
+from dash_application import create_kpi1, create_kpi2, create_kpi3, create_kpi4, create_kpi6, create_kpi5
 
 
 app = Flask(__name__)
@@ -27,6 +27,7 @@ login = LoginManager()
 login.init_app(app)
 create_kpi1(app)
 create_kpi2(app)
+create_kpi3(app)
 create_kpi4(app)
 create_kpi5(app)
 create_kpi6(app)
@@ -56,7 +57,7 @@ class RegisterForm(FlaskForm):
 
 @app.route("/")
 def index():
-    return render_template("base.html")
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -105,7 +106,9 @@ def kpi1():
 def kpi2():
     return render_template("KPI2.html")
 
-
+@app.route("/sla")
+def kpi3():
+    return render_template("KPI3.html")
 
 @app.route("/backlog")
 def kpi4():
